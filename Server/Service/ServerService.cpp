@@ -84,7 +84,11 @@ void ServerService::WriteResponse(int fd, ResponseBase *response)
 void ServerService::ExecuteRequest(int fd)
 {
     RequestBase *request = ReadRequest(fd);
+    cout << "New request type: " << (int)request->GetRequestType() << endl;
+
     ResponseBase *response = ExecuteRequestAndGetResponse(request);
+    cout << "Response: " << (int)response->GetResponseType() << endl << endl;
+
     WriteResponse(fd, response);
 
     delete request;

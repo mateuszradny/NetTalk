@@ -4,7 +4,7 @@
 class AuthService
 {
 public:
-  static const int MAX_INACTIVITY_IN_SECONDS = 180;
+  static const int MAX_INACTIVITY_IN_SECONDS = 7;
 
   AuthService(UserRepository *userRepository);
 

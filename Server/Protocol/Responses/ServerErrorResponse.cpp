@@ -18,6 +18,13 @@ ResponseType ServerErrorResponse::GetResponseType() const
 string ServerErrorResponse::ToString() const
 {
     ostringstream stream;
-    stream << (int)GetResponseType() << ' ' << GetErrorMessage();
+
+    int responseType = (int)GetResponseType();
+    stream.write((char *)&responseType, sizeof(responseType));
+
+    int length = errorMessage.size();
+    stream.write((char *)&length, sizeof(length));
+    stream.write(&errorMessage[0], length);
+
     return stream.str();
 }
