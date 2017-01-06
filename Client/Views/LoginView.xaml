@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="NetTalk.Views.LoginView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:NetTalk.Views"
+             xmlns:ValueConverters="clr-namespace:NetTalk.ValueConverters"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d"
+             d:DesignHeight="219" d:DesignWidth="300"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Regular"
+             TextElement.FontSize="13"
+             TextOptions.TextFormattingMode="Ideal"
+             TextOptions.TextRenderingMode="Auto"
+             Background="{DynamicResource MaterialDesignPaper}"
+             FontFamily="{DynamicResource MaterialDesignFont}">
+    <materialDesign:Card Padding="10" Margin="10">
+        <StackPanel Margin="5">
+            <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" Margin="0 0 0 20">Login</TextBlock>
+
+            <TextBlock Text="user name" />
+            <TextBox Text="{Binding UserName}" Margin="0 0 0 20"></TextBox>
+
+            <TextBlock Text="password" />
+            <PasswordBox Name="PasswordBox" PasswordChanged="PasswordBox_PasswordChanged" Margin="0 0 0 20"></PasswordBox>
+
+            <Button Command="{Binding SignIn}" Margin="0 0 0 20">Sign in</Button>
+            <TextBlock Text="Don't have an account? " TextAlignment="Center" Margin="0 0 0 20">
+                <Hyperlink Command="{Binding DataContext.DisplayRegistrationView, RelativeSource={RelativeSource AncestorType={x:Type local:MainView}}, Mode=OneWay}">Sign up</Hyperlink>
+            </TextBlock>
+
+            <TextBlock Text="{Binding Message}" Visibility="{Binding Message, Converter={ValueConverters:StringNullOrEmptyToVisibilityConverter}}" Foreground="Red" />
+        </StackPanel>
+    </materialDesign:Card>
+</UserControl>
