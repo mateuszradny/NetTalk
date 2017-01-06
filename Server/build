@@ -1,0 +1,2 @@
+gcc -c ./ExternalLibraries/sqlite3.c 
+g++ main.cpp sqlite3.o -o NetTalk -pthread -std=c++11 

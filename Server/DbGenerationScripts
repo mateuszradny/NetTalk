@@ -1,0 +1,5 @@
+CREATE TABLE "Contacts" ("UserName" TEXT NOT NULL  DEFAULT (null) ,"ContactName" TEXT NOT NULL  DEFAULT (null) )
+
+CREATE TABLE "Messages" ("Id" TEXT PRIMARY KEY  NOT NULL ,"SenderName" TEXT NOT NULL  DEFAULT (null) ,"RecipientName" TEXT NOT NULL  DEFAULT (null) ,"PostDate" INTEGER NOT NULL  DEFAULT (null) ,"Body" TEXT NOT NULL ,"IsRead" BOOL NOT NULL )
+
+CREATE TABLE "Users" ("UserName" TEXT PRIMARY KEY  NOT NULL  UNIQUE  check(typeof("UserName") = 'text') , "PasswordHash" TEXT NOT NULL , "LastActivity" DATETIME NOT NULL , "Token" TEXT check(typeof("Token") = 'text') )
