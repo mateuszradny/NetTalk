@@ -1,5 +1,6 @@
 #include "ContactRepository.h"
-
+#include <iostream>
+using namespace std;
 ContactRepository::ContactRepository(string databaseFilePath) : BaseRepository(databaseFilePath)
 {
 }
@@ -7,6 +8,7 @@ ContactRepository::ContactRepository(string databaseFilePath) : BaseRepository(d
 void ContactRepository::AddIfNotExists(Contact contact)
 {
     OpenDatabase();
+    
     string query = GetSelectByUserNameAndContactNameQuery(contact.UserName, contact.ContactName);
     vector<Contact> contacts = ExecuteSelectQuery(query);
 
@@ -97,7 +99,7 @@ string ContactRepository::GetSelectByUserNameAndContactNameQuery(string userName
 
     query.append("SELECT UserName, ContactName FROM Contacts WHERE UserName='");
     query.append(userName);
-    query.append("' AND ContactId='");
+    query.append("' AND ContactName='");
     query.append(contactName);
     query.append("';");
 

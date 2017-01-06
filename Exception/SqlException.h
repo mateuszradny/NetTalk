@@ -18,6 +18,8 @@ class SqlException : public exception
         return this->errorMessage.c_str();
     }
 
+    ~SqlException() throw() { }
+
   private:
     string errorMessage;
 };

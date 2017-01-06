@@ -18,18 +18,10 @@ ResponseType RegistrationResponse::GetResponseType() const
 string RegistrationResponse::ToString() const
 {
     ostringstream stream;
-    stream << (int)GetResponseType() << ' ' << (int)GetResult();
+
+    int responseType = (int)GetResponseType();
+    stream.write((char *)&responseType, sizeof(responseType));
+    stream.write((char *)&result, sizeof(result));
+
     return stream.str();
-}
-
-RegistrationResponse *RegistrationResponse::Parse(string str)
-{
-    istringstream stream(str);
-    int responseType, result;
-    stream >> responseType >> result;
-
-    if ((ResponseType)responseType != ResponseType::RegistrationResult)
-        throw "Invalid type of request";
-
-    return new RegistrationResponse((RegistrationResult)result);
 }

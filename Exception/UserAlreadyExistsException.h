@@ -22,6 +22,8 @@ class UserAlreadyExistsException : public exception
         return errorMessage.c_str();
     }
 
+    ~UserAlreadyExistsException() throw() { }
+
   private:
     string userName;
 };

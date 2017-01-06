@@ -11,8 +11,6 @@ class InvalidAuthTokenResponse : public ResponseBase
 public:
   virtual ResponseType GetResponseType() const;
   virtual string ToString() const;
-
-  static InvalidAuthTokenResponse *Parse(string str);
 };
 
 #endif

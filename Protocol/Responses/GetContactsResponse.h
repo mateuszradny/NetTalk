@@ -17,8 +17,6 @@ class GetContactsResponse : public ResponseBase
     virtual ResponseType GetResponseType() const;
     virtual string ToString() const;
 
-    static GetContactsResponse *Parse(string str);
-
   private:
     vector<ContactViewModel> contacts;
 };

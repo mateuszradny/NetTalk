@@ -4,7 +4,7 @@
 class AuthService
 {
 public:
-  static const int MAX_INACTIVITY_IN_SECONDS = 15;
+  static const int MAX_INACTIVITY_IN_SECONDS = 180;
 
   AuthService(UserRepository *userRepository);
 
@@ -20,7 +20,6 @@ private:
   bool IsValidToken(string token, User user);
   void ThrowIfInvalidUserName(string userName);
   void ThrowIfInvalidPassword(string password);
-  void UpdateLastActivity(User user);
 };
 
 #endif

@@ -24,19 +24,14 @@ ResponseType LoginResponse::GetResponseType() const
 string LoginResponse::ToString() const
 {
     ostringstream stream;
-    stream << (int)GetResponseType() << ' ' << (int)GetResult() << ' ' << GetAuthToken();
+
+    int responseType = (int)GetResponseType();
+    stream.write((char *)&responseType, sizeof(responseType));
+    stream.write((char *)&result, sizeof(result));
+
+    int tokenLength = authToken.length();
+    stream.write((char *)&tokenLength, sizeof(tokenLength));
+    stream.write(&authToken[0], tokenLength);
+
     return stream.str();
-}
-
-LoginResponse *LoginResponse::Parse(string str)
-{
-    istringstream stream(str);
-    int responseType, result;
-    string authToken;
-    stream >> responseType >> result >> authToken;
-
-    if ((ResponseType)responseType != ResponseType::LoginResult)
-        throw "Invalid type of request";
-
-    return new LoginResponse((LoginResult)result, authToken);
 }

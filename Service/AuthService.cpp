@@ -4,6 +4,7 @@
 #include "../Exception/InvalidCredentialsException.h"
 #include "../Exception/InvalidUserNameException.h"
 #include "../Exception/InvalidPasswordException.h"
+#include <string>
 
 AuthService::AuthService(UserRepository *userRepository)
 {
@@ -20,7 +21,8 @@ User AuthService::Auth(string token)
     if (!IsValidToken(token, user))
         throw InvalidAuthTokenException();
 
-    UpdateLastActivity(user);
+    user.LastActivity = time(nullptr);
+    userRepository->UpdateLastActivityAndToken(user);
     return user;
 }
 
@@ -42,7 +44,9 @@ string AuthService::LogIn(string userName, string password)
     if (user.PasswordHash != GetHash(password))
         throw InvalidCredentialsException();
 
-    UpdateLastActivity(user);
+    user.Token = GetHash(user.UserName + to_string(user.LastActivity));
+    user.LastActivity = time(nullptr);
+    userRepository->UpdateLastActivityAndToken(user);
     return user.Token;
 }
 
@@ -55,6 +59,7 @@ void AuthService::Register(string userName, string password)
     user.UserName = userName;
     user.PasswordHash = GetHash(password);
 
+    user.LastActivity = time(nullptr);
     userRepository->Add(user);
 }
 
@@ -94,11 +99,4 @@ void AuthService::ThrowIfInvalidPassword(string password)
     for (int i = 0; i < password.size(); i++)
         if (!isalnum(password[i]) && allowedCharacters.find(password[i]) == string::npos)
             throw InvalidPasswordException();
-}
-
-void AuthService::UpdateLastActivity(User user)
-{
-    user.LastActivity = time(nullptr);
-    
-    userRepository->UpdateLastActivity(user);
 }

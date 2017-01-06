@@ -16,7 +16,6 @@ public:
   string GetRecipientName() const;
 
   virtual RequestType GetRequestType();
-  virtual string ToString();
 
 #ifdef SERVER
   ResponseBase *Execute();

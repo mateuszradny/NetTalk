@@ -16,14 +16,6 @@ RequestType GetContactsRequest::GetRequestType()
     return RequestType::GetContacts;
 }
 
-string GetContactsRequest::ToString()
-{
-    ostringstream stream;
-    stream << (int)GetRequestType() << ' ' << GetAuthToken();
-
-    return stream.str();
-}
-
 #ifdef SERVER
 ResponseBase *GetContactsRequest::Execute()
 {
@@ -44,12 +36,13 @@ GetContactsRequest *GetContactsRequest::Parse(string str)
 {
     istringstream stream(str);
 
-    int requestType;
-    string authToken;
-
-    stream >> requestType >> authToken;
+    int requestType, length;
+    stream.read((char *)&requestType, sizeof(requestType));
     if ((RequestType)requestType != RequestType::GetContacts)
         throw "Invalid type of request";
 
+    stream.read((char *)&length, sizeof(length));
+    string authToken(length, ' ');
+    stream.read(&authToken[0], length);
     return new GetContactsRequest(authToken);
 }

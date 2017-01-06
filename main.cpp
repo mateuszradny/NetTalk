@@ -16,7 +16,6 @@
 #include "Persistence/ContactRepository.cpp"
 #include "Service/AuthService.cpp"
 #include "Service/ServerService.cpp"
-//#include "Service/ContactService.cpp"
 #include "Protocol/Responses/LoginResponse.cpp"
 #include <iostream>
 #include <sstream>
@@ -27,6 +26,7 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
+    srand(time(0));
     ServerService server;
 
     int nSocket, nClientSocket;
@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
         fsWmask = fsMask;
         tTimeout.tv_sec = 5;
         tTimeout.tv_usec = 0;
-        printf("select...\n");
+        //printf("select...\n");
         nFound = select(nMaxfd + 1, &fsRmask, &fsWmask, (fd_set *)0, &tTimeout);
 
         if (nFound < 0)
@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
         }
         if (nFound == 0)
         {
-            printf("%s: Timed out.\n", argv[0]);
+            //printf("%s: Timed out.\n", argv[0]);
             fflush(stdout);
         }
         if (FD_ISSET(nSocket, &fsRmask))

@@ -23,14 +23,6 @@ RequestType AddContactRequest::GetRequestType()
     return RequestType::AddContact;
 }
 
-string AddContactRequest::ToString()
-{
-    ostringstream stream;
-    stream << (int)GetRequestType() << ' ' << GetAuthToken() << ' ' << GetContactName();
-
-    return stream.str();
-}
-
 #ifdef SERVER
 ResponseBase *AddContactRequest::Execute()
 {
@@ -43,7 +35,7 @@ ResponseBase *AddContactRequest::Execute()
         ContactService contactService(&userRepository, &contactRepository, &authService);
 
         User user = authService.Auth(GetAuthToken());
-
+            
         contactService.AddContact(user.UserName, GetContactName());
         return new AddContactResponse(AddContactResult::Ok);
     }
@@ -58,12 +50,18 @@ AddContactRequest *AddContactRequest::Parse(string str)
 {
     istringstream stream(str);
 
-    int requestType;
-    string authToken, contactName;
-
-    stream >> requestType >> authToken >> contactName;
+    int requestType, length;
+    stream.read((char *)&requestType, sizeof(requestType));
     if ((RequestType)requestType != RequestType::AddContact)
         throw "Invalid type of request";
+
+    stream.read((char *)&length, sizeof(length));
+    string authToken(length, ' ');
+    stream.read(&authToken[0], length);
+
+    stream.read((char *)&length, sizeof(length));
+    string contactName(length, ' ');
+    stream.read(&contactName[0], length);
 
     return new AddContactRequest(authToken, contactName);
 }

@@ -16,8 +16,6 @@ class ServerErrorResponse : public ResponseBase
     virtual ResponseType GetResponseType() const;
     virtual string ToString() const;
 
-    static ServerErrorResponse *Parse(string str);
-
   private:
     string errorMessage;
 };

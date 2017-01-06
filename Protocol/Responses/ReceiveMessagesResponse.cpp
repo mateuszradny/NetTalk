@@ -18,36 +18,25 @@ ResponseType ReceiveMessagesResponse::GetResponseType() const
 string ReceiveMessagesResponse::ToString() const
 {
     ostringstream stream;
-    stream << (int)GetResponseType() << ' ' << messages.size();
-    for (int i = 0; i < messages.size(); i++)
-    {
-        stream << ' ' << messages[i].Id
-               << ' ' << messages[i].SenderName
-               << ' ' << messages[i].PostDate
-               << ' ' << messages[i].Body
-               << endl;
-    }
-    return stream.str();
-}
 
-ReceiveMessagesResponse *ReceiveMessagesResponse::Parse(string str)
-{
-    istringstream stream(str);
-    int responseType, messageCount;
-    stream >> responseType >> messageCount;
+    int responseType = (int)GetResponseType();
+    stream.write((char *)&responseType, sizeof(responseType));
 
-    if ((ResponseType)responseType != ResponseType::ReceiveMessages)
-        throw "Invalid type of request";
+    int messageCount = messages.size();
+    stream.write((char *)&messageCount, sizeof(messageCount));
 
-    vector<MessageViewModel> messages;
     for (int i = 0; i < messageCount; i++)
     {
-        MessageViewModel message;
-        stream >> message.Id >> message.SenderName >> message.PostDate;
-        getline(stream, message.Body);
+        int length = messages[i].SenderName.size();
+        stream.write((char *)&length, sizeof(length));
+        stream.write(&(messages[i].SenderName[0]), length);
 
-        messages.push_back(message);
+        stream.write((char *)&(messages[i].PostDate), sizeof(messages[i].PostDate));
+
+        length = messages[i].Body.size();
+        stream.write((char *)&length, sizeof(length));
+        stream.write(&(messages[i].Body[0]), length);
     }
 
-    return new ReceiveMessagesResponse(messages);
+    return stream.str();
 }

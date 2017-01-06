@@ -1,6 +1,8 @@
 #include "MessageRepository.h"
 #include "../ExternalLibraries/sqlite3.h"
 
+#include <iostream>
+
 MessageRepository::MessageRepository(string databaseFilePath) : BaseRepository(databaseFilePath)
 {
 }
@@ -44,7 +46,7 @@ vector<Message> MessageRepository::ExecuteSelectQuery(string query)
         message.Id = (char *)sqlite3_column_text(statement, 0);
         message.SenderName = (char *)sqlite3_column_text(statement, 1);
         message.RecipientName = (char *)sqlite3_column_text(statement, 2);
-        message.PostDate = (long int)sqlite3_column_text(statement, 3);
+        message.PostDate = (long long)sqlite3_column_int64(statement, 3);
         message.Body = (char *)sqlite3_column_text(statement, 4);
         message.IsRead = (bool)sqlite3_column_int(statement, 5);
 
@@ -65,7 +67,7 @@ string MessageRepository::GetInsertCommand(Message message)
     command.append("', '");
     command.append(message.RecipientName);
     command.append("', '");
-    command.append(to_string((long int)message.PostDate));
+    command.append(to_string((long long)message.PostDate));
     command.append("', '");
     command.append(message.Body);
     command.append("', '");
@@ -79,7 +81,7 @@ string MessageRepository::GetSelectByRecipientNameWhereIsReadEqualsFalseQuery(st
 {
     string query;
 
-    query.append("SELECT Id, SenderName, RecipientName, PostDate, Body, IsRead FROM Messages WHERE IsRead='FALSE' AND RecipientName='");
+    query.append("SELECT Id, SenderName, RecipientName, PostDate, Body, IsRead FROM Messages WHERE IsRead='0' AND RecipientName='");
     query.append(recipientName);
     query.append("';");
 

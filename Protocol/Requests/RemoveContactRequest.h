@@ -10,7 +10,6 @@ class RemoveContactRequest : public RequestBase
     string GetContactName() const;
 
     virtual RequestType GetRequestType();
-    virtual string ToString();
 
 #ifdef SERVER
     virtual ResponseBase *Execute();

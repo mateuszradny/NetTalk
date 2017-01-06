@@ -16,14 +16,6 @@ RequestType ReceiveMessagesRequest::GetRequestType()
     return RequestType::ReceiveMessages;
 }
 
-string ReceiveMessagesRequest::ToString()
-{
-    ostringstream stream;
-    stream << (int)GetRequestType() << ' ' << GetAuthToken();
-
-    return stream.str();
-}
-
 #ifdef SERVER
 
 ResponseBase *ReceiveMessagesRequest::Execute()
@@ -59,12 +51,15 @@ ReceiveMessagesRequest *ReceiveMessagesRequest::Parse(string str)
 {
     istringstream stream(str);
 
-    int requestType;
-    string authToken;
+    int requestType, length;
+    stream.read((char *)&requestType, sizeof(requestType));
 
-    stream >> requestType >> authToken;
     if ((RequestType)requestType != RequestType::ReceiveMessages)
         throw "Invalid type of request";
+
+    stream.read((char *)&length, sizeof(length));
+    string authToken(length, ' ');
+    stream.read(&authToken[0], length);
 
     return new ReceiveMessagesRequest(authToken);
 }

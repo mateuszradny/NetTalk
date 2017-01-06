@@ -17,6 +17,7 @@ RequestBase *ServerService::ReadRequest(int fd)
     int requestSize = ReadRequestSize(fd);
     string requestBody = ReadRequestBody(fd, requestSize);
     RequestType requestType = GetRequestType(requestBody);
+
     return GetRequest(requestType, requestBody);
 }
 
@@ -29,16 +30,22 @@ int ServerService::ReadRequestSize(int fd)
 
 string ServerService::ReadRequestBody(int fd, int requestSize)
 {
-    char body[requestSize];
-    read(fd, body, sizeof(body));
+    char bytes[requestSize];
+    read(fd, bytes, sizeof(bytes));
+
+    string body;
+    body.resize(sizeof(bytes));
+    memcpy(&body[0], bytes, sizeof(bytes));
+
     return body;
 }
 
 RequestType ServerService::GetRequestType(string requestBody)
 {
     int requestType;
+    
     istringstream stream(requestBody);
-    stream >> requestType;
+    stream.read((char*)&requestType, sizeof(requestType));
 
     return (RequestType)requestType;
 }
@@ -71,7 +78,7 @@ void ServerService::WriteResponse(int fd, ResponseBase *response)
     string responseBody = response->ToString();
     int responseSize = responseBody.size();
     write(fd, &responseSize, sizeof(responseSize));
-    write(fd, responseBody.c_str(), responseSize);
+    write(fd, &responseBody[0], responseSize);
 }
 
 void ServerService::ExecuteRequest(int fd)

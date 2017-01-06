@@ -18,18 +18,10 @@ ResponseType SendMessageResponse::GetResponseType() const
 string SendMessageResponse::ToString() const
 {
     ostringstream stream;
-    stream << (int)GetResponseType() << ' ' << (int)GetResult();
+
+    int responseType = (int)GetResponseType();
+    stream.write((char *)&responseType, sizeof(responseType));
+    stream.write((char *)&result, sizeof(result));
+
     return stream.str();
-}
-
-SendMessageResponse *SendMessageResponse::Parse(string str)
-{
-    istringstream stream(str);
-    int responseType, result;
-    stream >> responseType >> result;
-
-    if ((ResponseType)responseType != ResponseType::SendMessage)
-        throw "Invalid type of request";
-
-    return new SendMessageResponse((SendMessageResult)result);
 }

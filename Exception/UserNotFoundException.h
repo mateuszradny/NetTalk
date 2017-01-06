@@ -21,6 +21,8 @@ class UserNotFoundException : public exception
         return errorMessage.c_str();
     }
 
+    ~UserNotFoundException() throw() { }
+
   private:
     string userName;
 };

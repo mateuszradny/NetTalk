@@ -24,8 +24,6 @@ public:
   virtual ResponseType GetResponseType() const;
   virtual string ToString() const;
 
-  static RegistrationResponse *Parse(string str);
-
 private:
   RegistrationResult result;
 };

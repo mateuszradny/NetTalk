@@ -26,14 +26,6 @@ RequestType RegistrationRequest::GetRequestType()
     return RequestType::Registration;
 }
 
-string RegistrationRequest::ToString()
-{
-    ostringstream stream;
-    stream << (int)GetRequestType() << ' ' << GetUserName() << ' ' << GetPassword();
-
-    return stream.str();
-}
-
 #ifdef SERVER
 ResponseBase *RegistrationRequest::Execute()
 {
@@ -64,12 +56,19 @@ RegistrationRequest *RegistrationRequest::Parse(string str)
 {
     istringstream stream(str);
 
-    int requestType;
-    string userName, password;
+    int requestType, length;
+    stream.read((char *)&requestType, sizeof(requestType));
 
-    stream >> requestType >> userName >> password;
     if ((RequestType)requestType != RequestType::Registration)
         throw "Invalid type of request";
+
+    stream.read((char *)&length, sizeof(length));
+    string userName(length, ' ');
+    stream.read(&userName[0], length);
+
+    stream.read((char *)&length, sizeof(length));
+    string password(length, ' ');
+    stream.read(&password[0], length);
 
     return new RegistrationRequest(userName, password);
 }

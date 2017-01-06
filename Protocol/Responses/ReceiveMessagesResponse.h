@@ -16,8 +16,6 @@ class ReceiveMessagesResponse : public ResponseBase
     virtual ResponseType GetResponseType() const;
     virtual string ToString() const;
 
-    static ReceiveMessagesResponse *Parse(string str);
-
   private:
     vector<MessageViewModel> messages;
 };

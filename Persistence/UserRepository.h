@@ -16,14 +16,14 @@ public:
   bool Exists(string userName);
   User GetByToken(string token);
   User GetByUserName(string userName);
-  void UpdateLastActivity(User user);
+  void UpdateLastActivityAndToken(User user);
 
 private:
   vector<User> ExecuteSelectQuery(string query);
   string GetInsertCommand(User user);
   string GetSelectByTokenQuery(string token);
   string GetSelectByUserNameQuery(string userName);
-  string GetUpdateLastActivityCommand(User user);
+  string GetUpdateLastActivityAndTokenCommand(User user);
 };
 
 #endif

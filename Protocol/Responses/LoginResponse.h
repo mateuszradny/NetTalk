@@ -23,8 +23,6 @@ class LoginResponse : public ResponseBase
     virtual ResponseType GetResponseType() const;
     virtual string ToString() const;
 
-    static LoginResponse *Parse(string str);
-
   private:
     string authToken;
     LoginResult result;

@@ -62,10 +62,10 @@ User UserRepository::GetByUserName(string userName)
     return users[0];
 }
 
-void UserRepository::UpdateLastActivity(User user)
+void UserRepository::UpdateLastActivityAndToken(User user)
 {
     OpenDatabase();
-    string command = GetUpdateLastActivityCommand(user);
+    string command = GetUpdateLastActivityAndTokenCommand(user);
     ExecuteNonQuery(command);
     CloseDatabase();
 }
@@ -128,12 +128,14 @@ string UserRepository::GetSelectByUserNameQuery(string userName)
     return query;
 }
 
-string UserRepository::GetUpdateLastActivityCommand(User user)
+string UserRepository::GetUpdateLastActivityAndTokenCommand(User user)
 {
     string command;
 
     command.append("UPDATE Users SET LastActivity='");
     command.append(to_string((long int)user.LastActivity));
+    command.append("', Token='");
+    command.append(user.Token);
     command.append("' WHERE UserName='");
     command.append(user.UserName);
     command.append("';");

@@ -22,14 +22,6 @@ RequestType RemoveContactRequest::GetRequestType()
     return RequestType::RemoveContact;
 }
 
-string RemoveContactRequest::ToString()
-{
-    ostringstream stream;
-    stream << (int)GetRequestType() << ' ' << GetAuthToken() << ' ' << GetContactName();
-
-    return stream.str();
-}
-
 #ifdef SERVER
 ResponseBase *RemoveContactRequest::Execute()
 {

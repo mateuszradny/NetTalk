@@ -18,18 +18,12 @@ ResponseType AddContactResponse::GetResponseType() const
 string AddContactResponse::ToString() const
 {
     ostringstream stream;
-    stream << (int)GetResponseType() << ' ' << (int)GetResult();
+
+    int responseType = (int)GetResponseType();
+    stream.write((char *)&responseType, sizeof(responseType));
+
+    int result = (int)GetResult();
+    stream.write((char *)&result, sizeof(result));
+
     return stream.str();
-}
-
-AddContactResponse *AddContactResponse::Parse(string str)
-{
-    istringstream stream(str);
-    int responseType, result;
-    stream >> responseType >> result;
-
-    if ((ResponseType)responseType != ResponseType::AddContact)
-        throw "Invalid type of request";
-
-    return new AddContactResponse((AddContactResult)result);
 }

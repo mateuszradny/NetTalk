@@ -14,7 +14,6 @@ class ReceiveMessagesRequest : public RequestBase
     string GetAuthToken() const;
 
     virtual RequestType GetRequestType();
-    virtual string ToString();
 
 #ifdef SERVER
 

@@ -14,15 +14,15 @@ public:
 
 #ifdef SERVER
 
-  virtual void PreExecuteEvent() { }
+  virtual void PreExecuteEvent()
+  {
+  }
 
   virtual ResponseBase *Execute() = 0;
 
-  virtual void PostExecuteEvent() { }
-  
-#endif
+  virtual void PostExecuteEvent() {}
 
-  virtual string ToString() = 0;
+#endif
 };
 
 #endif

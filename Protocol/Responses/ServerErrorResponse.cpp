@@ -21,16 +21,3 @@ string ServerErrorResponse::ToString() const
     stream << (int)GetResponseType() << ' ' << GetErrorMessage();
     return stream.str();
 }
-
-ServerErrorResponse *ServerErrorResponse::Parse(string str)
-{
-    istringstream stream(str);
-    int responseType;
-    string errorMessage;
-    stream >> responseType >> errorMessage;
-
-    if ((ResponseType)responseType != ResponseType::ServerError)
-        throw "Invalid type of request";
-
-    return new ServerErrorResponse(errorMessage);
-}

@@ -17,8 +17,6 @@ class SendMessageResponse : public ResponseBase
     virtual ResponseType GetResponseType() const;
     virtual string ToString() const;
 
-    static SendMessageResponse *Parse(string str);
-
   private:
     SendMessageResult result;
 };

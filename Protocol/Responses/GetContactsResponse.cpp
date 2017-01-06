@@ -18,30 +18,20 @@ ResponseType GetContactsResponse::GetResponseType() const
 string GetContactsResponse::ToString() const
 {
     ostringstream stream;
-    stream << (int)GetResponseType() << ' ' << contacts.size();
-    for (int i = 0; i < contacts.size(); i++)
-        stream << ' ' << contacts[i].ContactName << ' ' << contacts[i].IsOnline;
 
-    return stream.str();
-}
+    int responseType = (int)GetResponseType();
+    stream.write((char *)&responseType, sizeof(responseType));
 
-GetContactsResponse *GetContactsResponse::Parse(string str)
-{
-    istringstream stream(str);
-    int responseType, contactCount;
-    stream >> responseType >> contactCount;
+    int count = contacts.size();
+    stream.write((char *)&count, sizeof(count));
 
-    if ((ResponseType)responseType != ResponseType::GetContacts)
-        throw "Invalid type of request";
-
-    vector<ContactViewModel> contacts;
-    for (int i = 0; i < contactCount; i++)
+    for (int i = 0; i < count; i++)
     {
-        ContactViewModel contact;
-        stream >> contact.ContactName >> contact.IsOnline;
-
-        contacts.push_back(contact);
+        int length = contacts[i].ContactName.size();
+        stream.write((char *)&length, sizeof(length));
+        stream.write(&contacts[i].ContactName[0], length);
+        stream.write((char *)&contacts[i].IsOnline, sizeof(contacts[i].IsOnline));
     }
 
-    return new GetContactsResponse(contacts);
+    return stream.str();
 }

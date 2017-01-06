@@ -29,14 +29,6 @@ RequestType SendMessageRequest::GetRequestType()
     return RequestType::SendMessage;
 }
 
-string SendMessageRequest::ToString()
-{
-    ostringstream stream;
-    stream << (int)GetRequestType() << ' ' << GetAuthToken() << ' ' << GetRecipientName() << ' ' << GetMessage();
-
-    return stream.str();
-}
-
 #ifdef SERVER
 ResponseBase *SendMessageRequest::Execute()
 {
@@ -64,13 +56,23 @@ SendMessageRequest *SendMessageRequest::Parse(string str)
 {
     istringstream stream(str);
 
-    int requestType;
-    string authToken, message, recipientName;
+    int requestType, length;
+    stream.read((char *)&requestType, sizeof(requestType));
 
-    stream >> requestType >> authToken >> recipientName;
     if ((RequestType)requestType != RequestType::SendMessage)
         throw "Invalid type of request";
 
-    getline(stream, message);
+    stream.read((char *)&length, sizeof(length));
+    string authToken(length, ' ');
+    stream.read(&authToken[0], length);
+
+    stream.read((char *)&length, sizeof(length));
+    string recipientName(length, ' ');
+    stream.read(&recipientName[0], length);
+
+    stream.read((char *)&length, sizeof(length));
+    string message(length, ' ');
+    stream.read(&message[0], length);
+
     return new SendMessageRequest(authToken, message, recipientName);
 }

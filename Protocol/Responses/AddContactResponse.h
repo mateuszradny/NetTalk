@@ -22,8 +22,6 @@ public:
   virtual ResponseType GetResponseType() const;
   virtual string ToString() const;
 
-  static AddContactResponse *Parse(string str);
-
 private:
   AddContactResult result;
 };
